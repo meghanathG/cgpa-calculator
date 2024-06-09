@@ -1,0 +1,24 @@
+package com.result.semester.model;
+
+
+public class Subject {
+	 private String grade;
+	 private int credit;
+	
+	 // Getters and Setters
+	 public String getGrade() {
+	     return grade;
+	 }
+	
+	 public void setGrade(String grade) {
+	     this.grade = grade;
+	 }
+	
+	 public int getCredit() {
+	     return credit;
+	 }
+	
+	 public void setCredit(int credit) {
+	     this.credit = credit;
+ }
+}

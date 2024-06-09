@@ -1,0 +1,25 @@
+package com.result.semester.model;
+
+import lombok.Data;
+
+@Data
+public class Subject {
+	 private String grade;
+	 private int credit;
+	 
+	 public String getGrade() {
+	        return grade;
+	    }
+
+	    public void setGrade(String grade) {
+	        this.grade = grade;
+	    }
+
+	    public int getCredit() {
+	        return credit;
+	    }
+
+	    public void setCredit(int credit) {
+	        this.credit = credit;
+	    }
+}

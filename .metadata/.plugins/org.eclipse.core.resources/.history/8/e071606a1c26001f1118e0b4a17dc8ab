@@ -1,0 +1,13 @@
+package com.result.semester.model;
+
+import lombok.Data;
+
+@Data
+public class Subject {
+	 private String grade;
+	 private int credit;
+	public String getGrade() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+}

@@ -1,0 +1,11 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <title>Result</title>
+</head>
+<body>
+    <h1>GPA Calculation Result</h1>
+    <p>Your GPA is: ${gpa}</p>
+    <a href="${pageContext.request.contextPath}/subjects">Back to form</a>
+</body>
+</html>

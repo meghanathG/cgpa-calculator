@@ -1,0 +1,9 @@
+package com.result.semester.model;
+
+import lombok.Data;
+
+@Data
+public class Subject {
+	 private String grade;
+	 private int credit;
+}

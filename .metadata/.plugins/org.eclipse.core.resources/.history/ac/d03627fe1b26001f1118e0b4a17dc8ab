@@ -1,0 +1,7 @@
+package com.result.semester.model;
+
+
+public class Subject {
+	 private String grade;
+	 private int credit;
+}
