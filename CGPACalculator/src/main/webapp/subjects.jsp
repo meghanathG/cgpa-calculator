@@ -1,40 +1,26 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 <head>
-    <title>Subjects Form</title>
+    <title>KL-CGPA Calculator</title>
     <style>
-        /* CSS styles */
         body {
-            background-image: url('images/klabt.jpg');
+            background-image: url('/images/klabt.jpg'); /* Adjust the path as needed */
             background-size: cover;
             background-repeat: no-repeat;
             font-family: Arial, sans-serif;
-        }
-        h1 {
             color: #333;
+            padding: 50px; /* Add padding for better appearance */
         }
-        .form-container {
-            background-color: rgba(255, 255, 255, 0.8); /* semi-transparent white background */
-            padding: 20px;
-            border-radius: 10px;
-            max-width: 500px;
-            margin: 0 auto;
-        }
+
         .form-group {
             margin-bottom: 15px;
         }
-        label {
-            display: inline-block;
-            width: 100px;
-            font-weight: bold;
-        }
-        input[type="number"] {
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            width: 200px;
-        }
+        
+        .danger {
+    color: red;
+}
+        
+
         button {
             padding: 10px 20px;
             background-color: #007bff;
@@ -43,42 +29,48 @@
             border-radius: 5px;
             cursor: pointer;
         }
+
         button:hover {
             background-color: #0056b3;
         }
     </style>
     <script>
+        let subjectCount = 1; // Start with one subject initially
+
         function addSubject() {
             const subjectForm = document.getElementById('subjectForm');
             const newSubject = document.createElement('div');
             newSubject.className = 'form-group';
-            const subjectCount = document.querySelectorAll('.form-group').length;
             newSubject.innerHTML = `
                 <label>Grade:</label>
-                <input type="number" name="subjects[${subjectCount}].grade" class="form-control" step="1"/>
+                <input type="number" name="grades" class="form-control" step="1" required/>
                 <label>Credit:</label>
-                <input type="number" name="subjects[${subjectCount}].credit" class="form-control" step="0.1"/>
+                <input type="number" name="credits" class="form-control" step="0.1" required/>
             `;
-            subjectForm.insertBefore(newSubject, document.getElementById('addButton'));
+            subjectForm.appendChild(newSubject);
+            subjectCount++;
         }
     </script>
 </head>
 <body>
-    <h1>By Clicking On add Subject you can add Multiple Subjects</h1>
-    <form action="${pageContext.request.contextPath}/subjects" method="post" id="subjectForm">
-        <c:forEach items="${subjectForm.subjects}" var="subject" varStatus="status">
-            <div class="form-group">
-                <label>Grade:</label>
-                <input type="number" name="subjects[${status.index}].grade" value="${subject.grade}" class="form-control" step="1"/>
-                <label>Credit:</label>
-                <input type="number" name="subjects[${status.index}].credit" value="${subject.credit}" class="form-control" step="0.1"/>
-            </div>
-        </c:forEach>
-        <button type="button" id="addButton" onclick="addSubject()">Add Subject</button>
-        <button type="submit">Submit</button>
+    <h1>Enter Grades and Credits</h1>
+    <form action="${pageContext.request.contextPath}/calculate" method="post" id="subjectForm">
+        <!-- Initial subject fields -->
+        <div class="form-group">
+            <label>Grade:</label>
+            <input type="number" name="grades" class="form-control" step="1" placeholder="Enter grade out of 10.0" required/>
+            <label>Credit:</label>
+            <input type="number" name="credits" class="form-control" step="0.1" placeholder="Enter credits correctly" required/>
+        </div>
+        <!-- End of initial subject fields -->
+        <div align="center">
+        <button align="centre" type="button" onclick="addSubject()">Add Subject</button>
+        <button type="submit">Calculate GPA</button>
+        </div>
     </form>
     <footer>
-    Note:Don't Enter the Null Values.
-    </footer>
+    <b class="danger">Note:Please avoid entering null values. Additionally, it's important to mention that in our ERP system, the total credits are known, which helps generate results based on those credits. However, in this web application, I'm unable to determine the total credits you've registered for a particular semester. Therefore, the results provided here are based on the credits you have entered.</b>
+</footer>
+
 </body>
 </html>

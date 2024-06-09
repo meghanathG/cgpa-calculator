@@ -1,0 +1,36 @@
+package com.result.semester.controller;
+
+import com.result.semester.model.Subject;
+import com.result.semester.model.SubjectForm;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+
+@Controller
+public class ClientController {
+
+    @GetMapping({"/", "/subjects"})
+    public String showForm(Model model) {
+        SubjectForm subjectForm = new SubjectForm();
+        subjectForm.getSubjects().add(new Subject()); 
+
+        model.addAttribute("subjectForm", subjectForm);
+        return "subjects";
+    }
+
+    @PostMapping("/calculate")
+    public String calculateResult(SubjectForm subjectForm, Model model) {
+        double totalGradePoints = 0;
+        double totalCredits = 0;
+
+        for (Subject subject : subjectForm.getSubjects()) {
+            totalGradePoints += subject.getGrade() * subject.getCredit();
+            totalCredits += subject.getCredit();
+        }
+
+        double gpa = totalGradePoints / totalCredits;
+        model.addAttribute("gpa", gpa);
+        return "result";
+    }
+}

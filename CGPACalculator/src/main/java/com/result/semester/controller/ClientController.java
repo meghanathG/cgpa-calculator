@@ -1,39 +1,40 @@
 package com.result.semester.controller;
 
-
-import com.result.semester.model.*;
+import com.result.semester.model.Subject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class ClientController {
 
-	@GetMapping({"/", "/subjects"})
+    @GetMapping({"/", "/subjects"})
     public String showForm(Model model) {
-        SubjectForm subjectForm = new SubjectForm();
-        subjectForm.getSubjects().add(new Subject());
-
-        model.addAttribute("subjectForm", subjectForm);
+        model.addAttribute("subject", new Subject());
         return "subjects";
     }
 
-    @PostMapping("/subjects")
-    public String submitForm(SubjectForm subjectForm, Model model) {
-        double gpa = calculateGPA(subjectForm);
-        model.addAttribute("gpa", gpa);
-        model.addAttribute("subjectForm", subjectForm);
-        return "result";
-    }
-
-    private double calculateGPA(SubjectForm subjectForm) {
-        double totalPoints = 0;
-        double totalCredits = 0;
-        for (Subject subject : subjectForm.getSubjects()) {
-            totalPoints += subject.getGrade() * subject.getCredit();
-            totalCredits += subject.getCredit();
+    @PostMapping("/calculate")
+    public String calculateResult(@RequestParam("grades") int[] grades,
+                                  @RequestParam("credits") double[] credits,
+                                  Model model) {
+        if (grades.length != credits.length) {
+            model.addAttribute("error", "Invalid input: Number of grades and credits do not match");
+            return "subjects";
         }
-        return totalCredits == 0 ? 0 : totalPoints / totalCredits;
+
+        double totalGradePoints = 0;
+        double totalCredits = 0;
+
+        for (int i = 0; i < grades.length; i++) {
+            totalGradePoints += grades[i] * credits[i];
+            totalCredits += credits[i];
+        }
+
+        double gpa = totalCredits != 0 ? totalGradePoints / totalCredits : 0;
+        model.addAttribute("gpa", gpa);
+        return "result";
     }
 }

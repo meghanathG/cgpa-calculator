@@ -1,0 +1,48 @@
+package com.result.semester.controller;
+
+import com.result.semester.model.Subject;
+import com.result.semester.model.SubjectForm;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+@Controller
+public class ClientController {
+
+    @GetMapping({"/", "/subjects"})
+    public String showForm(Model model) {
+        // Add a default subject to display initially
+        model.addAttribute("subject", new Subject());
+        return "subjects";
+    }
+
+    @PostMapping("/calculate")
+    public String calculateResult(@RequestParam("grade") int[] grades,
+                                  @RequestParam("credit") double[] credits,
+                                  Model model) {
+        // Validate if the number of grades and credits are the same
+        if (grades.length != credits.length) {
+            // Handle the error appropriately
+            model.addAttribute("error", "Invalid input: Number of grades and credits do not match");
+            return "subjects";
+        }
+
+        double totalGradePoints = 0;
+        double totalCredits = 0;
+
+        // Calculate total grade points and credits
+        for (int i = 0; i < grades.length; i++) {
+            totalGradePoints += grades[i] * credits[i];
+            totalCredits += credits[i];
+        }
+
+        // Calculate GPA
+        double gpa = totalCredits != 0 ? totalGradePoints / totalCredits : 0;
+
+        // Pass GPA to the result page
+        model.addAttribute("gpa", gpa);
+        return "result";
+    }
+}
